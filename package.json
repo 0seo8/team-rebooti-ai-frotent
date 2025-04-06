@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@types/styled-components": "^5.1.34",
+    "@types/uuid": "^10.0.0",
     "axios": "^1.8.4",
     "crypto-js": "^4.2.0",
     "fabric": "^6.6.1",
@@ -27,6 +28,7 @@
     "react-dom": "^19.0.0",
     "sonner": "^2.0.3",
     "styled-components": "^6.1.17",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },

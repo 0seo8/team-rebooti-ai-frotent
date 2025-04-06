@@ -1,9 +1,11 @@
 import FileUploader from '@/components/FileUploader';
+import StampUploader from '@/components/StampUploader';
 import PDFCanvas from '@/components/PDFCanvas';
 import PDFPreview from '@/components/PDFPreview';
 import GlobalStyle from '@/styles/global';
-import './App.css';
 import { Toaster } from 'sonner';
+import './App.css';
+
 function App() {
   return (
     <>
@@ -11,9 +13,16 @@ function App() {
       <Toaster position="bottom-center" duration={2000} richColors />
       <div id="app">
         <div>
-          <FileUploader />
-          <PDFCanvas />
-          <PDFPreview />
+          <div className="left-section">
+            <FileUploader />
+            <StampUploader />
+          </div>
+          <div>
+            <PDFCanvas />
+          </div>
+          <div>
+            <PDFPreview />
+          </div>
         </div>
       </div>
     </>

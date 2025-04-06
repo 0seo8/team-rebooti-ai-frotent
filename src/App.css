@@ -38,3 +38,15 @@
 #app > div > div:nth-child(3) {
   flex: 0 0 250px;
 }
+
+.left-section {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

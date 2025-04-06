@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useStore, Stamp } from '@/store';
 import { useFileValidation } from '@/hooks/useFileValidation';
@@ -12,6 +12,14 @@ const StampUploader = () => {
 
   const { isLoading: isStampLoading, validateFile: validateStampFile } =
     useFileValidation(stampFileSchema);
+
+  useEffect(() => {
+    console.log('file', file);
+  }, [file]);
+
+  useEffect(() => {
+    console.log('selectedStamp', selectedStamp);
+  }, [selectedStamp]);
 
   const handleStampChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -42,6 +50,9 @@ const StampUploader = () => {
 
               addStamp(newStamp);
               toast.success('도장 이미지가 추가되었습니다.');
+              console.log('도장 이미지 추가됨:', newStamp);
+              // 업로드 후 자동으로 선택
+              selectStamp(newStamp);
             }
           };
           reader.readAsDataURL(selectedFile);

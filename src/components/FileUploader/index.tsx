@@ -7,11 +7,10 @@ import { toast } from 'sonner';
 
 const FileUploader = () => {
   const { file, setFile } = useStore();
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const { isLoading: isPdfLoading, validateFile: validatePdfFile } =
     useFileValidation(pdfFileSchema);
-
-  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;

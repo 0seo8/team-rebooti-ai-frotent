@@ -1,7 +1,6 @@
-import FileUploader from '@/components/FileUploader';
-import StampUploader from '@/components/StampUploader';
-import PDFCanvas from '@/components/PDFCanvas';
-import PDFPreview from '@/components/PDFPreview';
+import ControlPanel from '@/components/ControlPanel';
+import EditorCanvas from '@/components/EditorCanvas';
+import PreviewPanel from '@/components/PreviewPanel';
 import GlobalStyle from '@/styles/global';
 import { Toaster } from 'sonner';
 import './App.css';
@@ -13,16 +12,9 @@ function App() {
       <Toaster position="bottom-center" duration={2000} richColors />
       <div id="app">
         <div>
-          <div className="left-section">
-            <FileUploader />
-            <StampUploader />
-          </div>
-          <div>
-            <PDFCanvas />
-          </div>
-          <div>
-            <PDFPreview />
-          </div>
+          <ControlPanel />
+          <EditorCanvas />
+          <PreviewPanel />
         </div>
       </div>
     </>

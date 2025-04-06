@@ -42,15 +42,16 @@
 
 ### 1. 프로젝트 구조 분석
 
-- 현재 파일 구조 파악
-- 컴포넌트 구성 확인
-- 기존 기능 테스트
+- [x] 현재 파일 구조 파악
+- [x] 컴포넌트 구성 확인
+- ~~기존 기능 테스트~~
 
 ### 2. 기본 환경 설정
 
-- npm 스크립트 수정 (개발/프로덕션 모드)
+- [x] npm 스크립트 수정 (개발/프로덕션 모드)
     - `npm run vite` → `npm run dev`로 변경
     - 필요한 스크립트 추가
+- eslint, prettier 세텅
 - CSS-in-JS 라이브러리 설치 (styled-components)
 - 폴더 구조 재구성
     - components, pages, styles, utils, hooks 등의 폴더 생성

@@ -1,18 +1,21 @@
-import A from "./A";
-import B from "./B";
-import C from "./C";
-
-import "./App.css";
+import FileUploader from '@/components/FileUploader';
+import PDFCanvas from '@/components/PDFCanvas';
+import PDFPreview from '@/components/PDFPreview';
+import GlobalStyle from '@/styles/global';
+import './App.css';
 
 function App() {
   return (
-    <div id="app">
-      <div>
-        <A />
-        <B />
-        <C />
+    <>
+      <GlobalStyle />
+      <div id="app">
+        <div>
+          <FileUploader />
+          <PDFCanvas />
+          <PDFPreview />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

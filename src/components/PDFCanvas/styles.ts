@@ -15,14 +15,25 @@ export const Container = styled.div`
   }
 `;
 
-export const DownloadButton = styled.button`
+export const ButtonContainer = styled.div`
   position: absolute;
   top: 20px;
   right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const DownloadButton = styled.button`
   background-color: #666;
   color: white;
   border: none;
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;

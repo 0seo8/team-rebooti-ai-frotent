@@ -1,5 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker?url';
+import { PDFDocument } from 'pdf-lib';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -61,4 +62,79 @@ export const pdfFileToImage = async (
 export const getImageByFile = async (file: File): Promise<string | undefined> => {
   const result = await pdfFileToImage(file);
   return result.image;
+};
+
+/**
+ * Base64 데이터 URL에서 바이너리 데이터를 추출합니다.
+ * @param dataUrl Base64 이미지 데이터 URL
+ * @returns 바이너리 데이터
+ */
+export const dataURLToBytes = (dataUrl: string): Uint8Array => {
+  const base64 = dataUrl.split(',')[1];
+  const binaryString = window.atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes;
+};
+
+/**
+ * PDF 파일에 도장 이미지를 추가하여 새 PDF를 생성합니다.
+ * @param pdfFile 원본 PDF 파일
+ * @param stampDataUrl 도장 이미지 데이터 URL
+ * @param position 도장 위치 (x, y 좌표와 너비, 높이)
+ * @param pageNumber 도장을 추가할 페이지 번호 (1부터 시작)
+ * @returns 도장이 추가된 PDF 파일의 Uint8Array
+ */
+export const addStampToPdf = async (
+  pdfFile: File,
+  stampDataUrl: string,
+  position: { x: number; y: number; width: number; height: number },
+  pageNumber: number = 1,
+): Promise<Uint8Array> => {
+  try {
+    // 파일을 ArrayBuffer로 변환
+    const fileArrayBuffer = await pdfFile.arrayBuffer();
+
+    // PDF 문서 로드
+    const pdfDoc = await PDFDocument.load(fileArrayBuffer);
+
+    // 도장 이미지를 PNG로 변환
+    const stampBytes = dataURLToBytes(stampDataUrl);
+    const stampImage = await pdfDoc.embedPng(stampBytes);
+
+    // PDF 페이지 가져오기 (페이지 번호는 0부터 시작하므로 -1)
+    const pages = pdfDoc.getPages();
+    const page = pages[pageNumber - 1];
+
+    // 페이지 크기
+    const { width, height } = page.getSize();
+
+    // 상대적 위치를 절대 위치로 변환 (fabric.js 캔버스 좌표계 -> PDF 좌표계)
+    const pdfX = position.x * (width / 500); // 캔버스 너비가 500px라고 가정
+    const pdfY = height - position.y * (height / (500 * Math.sqrt(2))); // 캔버스 높이 조정
+
+    // 도장 크기 조정
+    const scaleWidth = position.width * (width / 500);
+    const scaleHeight = position.height * (height / (500 * Math.sqrt(2)));
+
+    // 도장 이미지 추가
+    page.drawImage(stampImage, {
+      x: pdfX,
+      y: pdfY,
+      width: scaleWidth,
+      height: scaleHeight,
+    });
+
+    // 변경된 PDF 저장
+    const modifiedPdfBytes = await pdfDoc.save();
+
+    return modifiedPdfBytes;
+  } catch (error) {
+    console.error('PDF에 도장 추가 중 오류 발생:', error);
+    throw new Error('PDF에 도장을 추가하는 중 오류가 발생했습니다.');
+  }
 };

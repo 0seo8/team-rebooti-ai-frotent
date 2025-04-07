@@ -100,7 +100,7 @@ export const useStampAdder = () => {
 
           // 이미지 로드 시작
           img.src = selectedStamp.src;
-        } catch (_) {
+        } catch {
           toast.error('도장 이미지를 추가하는 중 오류가 발생했습니다.');
           resolve(false);
         }

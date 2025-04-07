@@ -37,3 +37,15 @@ export const DownloadButton = styled.button`
     cursor: not-allowed;
   }
 `;
+
+export const PageIndicator = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+`;

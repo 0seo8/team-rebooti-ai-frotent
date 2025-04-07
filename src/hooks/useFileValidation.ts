@@ -19,7 +19,6 @@ export const useFileValidation = <T extends z.ZodType>(schema: T) => {
     try {
       setIsLoading(true);
 
-      // 파일이 없는 경우는 유효하다고 처리
       if (file === null) return true;
 
       schema.parse(file);
@@ -27,7 +26,6 @@ export const useFileValidation = <T extends z.ZodType>(schema: T) => {
     } catch (err) {
       if (err instanceof ZodError) {
         const errorMessage = err.errors[0]?.message || '파일 유효성 검사에 실패했습니다.';
-
         toast.error(errorMessage);
       } else {
         toast.error('알 수 없는 오류가 발생했습니다.');

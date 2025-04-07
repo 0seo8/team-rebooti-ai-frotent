@@ -1,23 +1,24 @@
+import { useRef, useEffect } from 'react';
 import { useStore } from '@/store';
 import * as S from './styles';
-import { usePdfEditor } from '@/hooks/usePdfEditor';
+import { usePdfDownloader } from '@/hooks/usePdfDownloader';
+import { useCanvasInitializer } from '@/hooks/useCanvasInitializer';
 
 const PDFCanvas = () => {
-  const { file, selectedStamp } = useStore();
-  const { isGeneratingPdf, downloadWithStamp, initializeCanvas } = usePdfEditor(
-    file,
-    selectedStamp,
-  );
+  const { file } = useStore();
+  const { isGeneratingPdf, downloadWithStamp } = usePdfDownloader();
+  const { initializeCanvas } = useCanvasInitializer();
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const handleCanvasRef = (element: HTMLCanvasElement | null) => {
-    if (element) {
-      initializeCanvas(element);
+  useEffect(() => {
+    if (canvasRef.current) {
+      initializeCanvas(canvasRef.current);
     }
-  };
+  }, [initializeCanvas]);
 
   return (
     <S.Container>
-      <canvas ref={handleCanvasRef} />
+      <canvas ref={canvasRef} />
 
       <S.DownloadButton
         type="button"

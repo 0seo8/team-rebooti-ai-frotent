@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+import * as fabric from 'fabric';
 /**
  * 전자 도장 이미지 타입
  */
@@ -25,6 +25,14 @@ interface StoreState {
   // 현재 선택된 도장
   selectedStamp: Stamp | null;
   selectStamp: (stamp: Stamp | null) => void;
+
+  // Fabric 캔버스 상태 (UI 객체)
+  canvas: fabric.Canvas | null;
+  setCanvas: (canvas: fabric.Canvas | null) => void;
+
+  // 캔버스 위의 도장 이미지 객체
+  stampObject: fabric.Image | null;
+  setStampObject: (stampObject: fabric.Image | null) => void;
 }
 
 /**
@@ -50,4 +58,12 @@ export const useStore = create<StoreState>((set) => ({
   // 현재 선택된 도장
   selectedStamp: null,
   selectStamp: (stamp: Stamp | null) => set({ selectedStamp: stamp }),
+
+  // Fabric 캔버스 상태 (UI 객체)
+  canvas: null,
+  setCanvas: (canvas: fabric.Canvas | null) => set({ canvas }),
+
+  // 캔버스 위의 도장 이미지 객체
+  stampObject: null,
+  setStampObject: (stampObject: fabric.Image | null) => set({ stampObject }),
 }));

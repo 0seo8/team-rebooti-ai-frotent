@@ -16,46 +16,44 @@ export const useCanvasInitializer = () => {
    * 캔버스 초기화 함수
    */
   const initializeCanvas = useCallback(
-    (canvasElement: HTMLCanvasElement | null) => {
+    async (canvasElement: HTMLCanvasElement | null) => {
       // 파일이 있고 캔버스 요소가 있는 경우에만 초기화 진행
       if (
         file &&
         canvasElement &&
         (!lastFileRef.current || lastFileRef.current !== file || !initialized.current)
       ) {
-        // 마지막으로 처리한 파일 업데이트
         lastFileRef.current = file;
         initialized.current = true;
 
         try {
-          // 새 캔버스 생성
           const newCanvas = new fabric.Canvas(canvasElement, {
             width: FABRIC_CANVAS_WIDTH,
             height: FABRIC_CANVAS_HEIGHT,
             selection: false,
           });
 
-          // 스토어에 캔버스 저장
           setCanvas(newCanvas);
 
-          // PDF 이미지 로드 및 배경으로 설정
-          getImageByFile(file)
-            .then((image) => {
-              if (image) {
-                fabric.FabricImage.fromURL(image).then((img) => {
-                  img.set({
-                    objectCaching: false,
-                  });
+          try {
+            const image = await getImageByFile(file);
 
-                  newCanvas.backgroundImage = img;
-                  newCanvas.requestRenderAll();
+            if (image) {
+              fabric.FabricImage.fromURL(image).then((fabricImg) => {
+                fabricImg.set({
+                  objectCaching: false,
+                  scaleX: FABRIC_CANVAS_WIDTH / (fabricImg.width || 1),
+                  scaleY: FABRIC_CANVAS_HEIGHT / (fabricImg.height || 1),
                 });
-              }
-            })
-            .catch((error) => {
-              console.error('PDF 이미지 로딩 실패:', error);
-              toast.error('PDF 이미지 로딩 중 오류가 발생했습니다.');
-            });
+
+                newCanvas.backgroundImage = fabricImg;
+                newCanvas.renderAll();
+              });
+            }
+          } catch (imageError) {
+            console.error('PDF 이미지 로딩 실패:', imageError);
+            toast.error('PDF 이미지 로딩 중 오류가 발생했습니다.');
+          }
         } catch (error) {
           console.error('캔버스 초기화 중 오류:', error);
           toast.error('캔버스 초기화 중 오류가 발생했습니다.');

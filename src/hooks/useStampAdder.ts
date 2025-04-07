@@ -34,10 +34,8 @@ export const useStampAdder = () => {
           img.crossOrigin = 'anonymous';
           img.onload = () => {
             try {
-              // 로드된 이미지로 Fabric 이미지 생성
               const fabricImg = new fabric.FabricImage(img);
 
-              // 이미지 크기 조정 (너무 크지 않게)
               const maxSize = 100;
               if (fabricImg.width && fabricImg.height) {
                 if (fabricImg.width > maxSize || fabricImg.height > maxSize) {
@@ -46,7 +44,6 @@ export const useStampAdder = () => {
                 }
               }
 
-              // 이미지 위치 설정 (중앙)
               fabricImg.set({
                 left: targetCanvas.width! / 2 - (fabricImg.width! * fabricImg.scaleX!) / 2,
                 top: targetCanvas.height! / 2 - (fabricImg.height! * fabricImg.scaleY!) / 2,
@@ -56,11 +53,9 @@ export const useStampAdder = () => {
                 cornerColor: '#2196F3',
               });
 
-              // 이미지를 캔버스에 추가하고 선택 상태로 설정
               targetCanvas.add(fabricImg);
               targetCanvas.setActiveObject(fabricImg);
 
-              // 스토어에 도장 객체 저장
               setStampObject(fabricImg);
 
               targetCanvas.requestRenderAll();
@@ -80,9 +75,9 @@ export const useStampAdder = () => {
             resolve(false);
           };
 
-          // 이미지 로드 시작
           img.src = selectedStamp.src;
         } catch (error) {
+          console.log(error);
           toast.error('도장 이미지를 추가하는 중 오류가 발생했습니다.');
           resolve(false);
         }
@@ -92,7 +87,7 @@ export const useStampAdder = () => {
   );
 
   /**
-   * 도장에 포커스를 설정하고 사용자에게 알림
+   * 도장에 포커스 설정
    */
   const focusActiveStamp = useCallback(async () => {
     if (!canvas) {
@@ -102,26 +97,23 @@ export const useStampAdder = () => {
 
     if (!stampObject) {
       if (selectedStamp) {
-        toast.info('도장을 추가하는 중입니다...');
-
         try {
           // Promise 기반 함수 호출
           const success = await addStampToCanvas(canvas);
 
           if (success) {
-            // 도장 객체가 성공적으로 추가되었으므로 포커스 즉시 시도
             const currentStampObject = useStore.getState().stampObject;
             if (currentStampObject) {
               canvas.setActiveObject(currentStampObject);
               canvas.requestRenderAll();
-              toast.success('도장을 드래그하여 위치를 조정한 후 PDF 다운로드 버튼을 클릭하세요.');
               return true;
             }
           }
 
           return false;
         } catch (error) {
-          toast.error('도장 추가 중 오류가 발생했습니다.', error);
+          console.log(error);
+          toast.error('도장 추가 중 오류가 발생했습니다.');
           return false;
         }
       }
@@ -131,7 +123,6 @@ export const useStampAdder = () => {
     }
 
     try {
-      // 도장을 선택 상태로 설정
       canvas.setActiveObject(stampObject);
       canvas.requestRenderAll();
 

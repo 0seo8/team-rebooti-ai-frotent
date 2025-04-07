@@ -1,40 +1,18 @@
-import { useRef } from 'react';
-import { useStore } from '@/store';
 import * as S from './styles';
-import { useFileValidation } from '@/hooks/useFileValidation';
-import { pdfFileSchema } from '@/utils/validations';
-import { toast } from 'sonner';
+import { useFileManager } from '@/hooks/useFileManager';
 
 const FileUploader = () => {
-  const { file, setFile } = useStore();
-  const pdfInputRef = useRef<HTMLInputElement>(null);
-
-  const { isLoading: isPdfLoading, validateFile: validatePdfFile } =
-    useFileValidation(pdfFileSchema);
-
-  const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0] || null;
-
-    if (selectedFile) {
-      const isValid = validatePdfFile(selectedFile);
-
-      if (isValid) {
-        setFile(selectedFile);
-        toast.success('PDF 파일이 업로드되었습니다.');
-      }
-    }
-
-    e.target.value = '';
-  };
-
-  const handlePDFUpload = () => {
-    pdfInputRef.current?.click();
-  };
-
-  const handlePDFRemove = () => {
-    setFile(null);
-    toast.info('PDF 파일이 삭제되었습니다.');
-  };
+  const {
+    file,
+    pdfInputRef,
+    isPdfLoading,
+    showConfirm,
+    handlePDFChange,
+    handlePDFUpload,
+    handlePDFRemove,
+    handleCancelDelete,
+    setShowConfirm,
+  } = useFileManager();
 
   return (
     <S.Container>
@@ -54,12 +32,31 @@ const FileUploader = () => {
         </div>
 
         {file?.name && (
-          <S.PdfFileInfo>
-            📄 파일명: <strong>{file.name}</strong>
-            <S.RemoveButton type="button" onClick={handlePDFRemove}>
-              X
-            </S.RemoveButton>
-          </S.PdfFileInfo>
+          <>
+            <S.PdfFileInfo>
+              📄 파일명: <strong>{file.name}</strong>
+              <S.RemoveButton type="button" onClick={() => setShowConfirm(true)}>
+                X
+              </S.RemoveButton>
+            </S.PdfFileInfo>
+
+            {showConfirm ? (
+              <S.ButtonGroup>
+                <S.DeleteButton type="button" onClick={handlePDFRemove}>
+                  삭제 확인
+                </S.DeleteButton>
+                <S.UploadButton type="button" onClick={handleCancelDelete}>
+                  취소
+                </S.UploadButton>
+              </S.ButtonGroup>
+            ) : (
+              <S.ButtonGroup>
+                <S.DeleteButton type="button" onClick={() => setShowConfirm(true)}>
+                  PDF 파일 삭제
+                </S.DeleteButton>
+              </S.ButtonGroup>
+            )}
+          </>
         )}
       </S.SectionItem>
     </S.Container>

@@ -18,16 +18,27 @@ export const PdfFileInfo = styled.div`
   display: flex;
   align-items: center;
   margin-top: 10px;
-  padding: 8px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
 `;
 
 export const RemoveButton = styled.button`
   margin-left: 10px;
-  background-color: transparent;
+  background-color: #ff4d4f;
   border: none;
-  color: #ff0000;
+  color: white;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ff7875;
+  }
 `;
 
 export const UploadButton = styled.button`
@@ -37,6 +48,11 @@ export const UploadButton = styled.button`
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #888;
+  }
 `;
 
 export const StampsContainer = styled.div`
@@ -65,4 +81,24 @@ export const ApplyStampButton = styled.button`
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+export const DeleteButton = styled.button`
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ff7875;
+  }
 `;

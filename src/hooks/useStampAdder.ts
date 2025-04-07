@@ -165,8 +165,6 @@ export const useStampAdder = () => {
 
     if (!stampObject) {
       if (selectedStamp) {
-        toast.info('도장을 추가하는 중입니다...');
-
         try {
           // Promise 기반 함수 호출
           const success = await addStampToCanvas(canvas);
@@ -177,7 +175,6 @@ export const useStampAdder = () => {
             if (currentStampObject) {
               canvas.setActiveObject(currentStampObject);
               canvas.requestRenderAll();
-              toast.success('도장을 드래그하여 위치를 조정한 후 도장 적용 버튼을 클릭하세요.');
               return true;
             }
           }
